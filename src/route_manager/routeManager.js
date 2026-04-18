@@ -31,6 +31,6 @@ export const initRoutes = (app) => {
   app.use("/api/users", userRoutes);
   app.use("/api/roles", roleRoutes);
   app.use("/api/institutes", instituteRoutes);
-  app.use("/api/mapping", mappingRoutes);
+  app.use("/api/mappings", mappingRoutes);
   app.use("/api/tenants", tenantRoutes);
 };
