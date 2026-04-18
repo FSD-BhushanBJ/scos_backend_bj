@@ -9,6 +9,7 @@ import {
 
 const router = express.Router();
 
+router.post("/", createTenant);
 router.post("/create", createTenant);
 router.get("/all", getTenants);
 router.get("/:id", getTenantById);

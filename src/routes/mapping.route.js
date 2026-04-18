@@ -9,6 +9,7 @@ import {
 
 const router = express.Router();
 
+router.post("/", createMapping);
 router.post("/create", createMapping);
 router.get("/all", getMappings);
 router.get("/:id", getMappingById);

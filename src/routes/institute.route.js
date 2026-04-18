@@ -9,6 +9,7 @@ import {
 
 const router = express.Router();
 
+router.post("/", createInstitute);
 router.post("/create", createInstitute);
 router.get("/all", getInstitutes);
 router.get("/:id", getInstituteById);
