@@ -7,6 +7,8 @@ export const createInstituteModel = async (
   code,
   type,
   subtype,
+  city,
+  state
 ) => {
   return await pool.query(
     `INSERT INTO public.institutes 
