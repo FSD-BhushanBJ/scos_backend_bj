@@ -1,33 +1,43 @@
 import pool from "../config/db.js";
 
 // CREATE
-export const createInstituteModel = async (tenant_id, name, code, type, subtype) => {
+export const createInstituteModel = async (
+  tenant_id,
+  name,
+  code,
+  type,
+  subtype,
+) => {
   return await pool.query(
     `INSERT INTO public.institutes 
-     (tenant_id, name, code, type, subtype)
-     VALUES ($1, $2, $3, $4, $5)
-     RETURNING *`,
-    [tenant_id, name, code, type, subtype]
+   (tenant_id, name, code, type, subtype, city, state)
+   VALUES ($1, $2, $3, $4, $5, $6, $7)
+   RETURNING *`,
+    [tenant_id, name, code, type, subtype, city, state],
   );
 };
 
 // GET ALL
 export const getInstitutesModel = async () => {
-  return await pool.query(
-    `SELECT * FROM public.institutes ORDER BY id DESC`
-  );
+  return await pool.query(`SELECT * FROM public.institutes ORDER BY id DESC`);
 };
 
 // GET BY ID
 export const getInstituteByIdModel = async (id) => {
-  return await pool.query(
-    `SELECT * FROM public.institutes WHERE id = $1`,
-    [id]
-  );
+  return await pool.query(`SELECT * FROM public.institutes WHERE id = $1`, [
+    id,
+  ]);
 };
 
 // UPDATE
-export const updateInstituteModel = async (id, tenant_id, name, code, type, subtype) => {
+export const updateInstituteModel = async (
+  id,
+  tenant_id,
+  name,
+  code,
+  type,
+  subtype,
+) => {
   return await pool.query(
     `UPDATE public.institutes
      SET tenant_id = $1,
@@ -37,7 +47,7 @@ export const updateInstituteModel = async (id, tenant_id, name, code, type, subt
          subtype = $5
      WHERE id = $6
      RETURNING *`,
-    [tenant_id, name, code, type, subtype, id]
+    [tenant_id, name, code, type, subtype, id],
   );
 };
 
@@ -47,6 +57,6 @@ export const deleteInstituteModel = async (id) => {
     `DELETE FROM public.institutes
      WHERE id = $1
      RETURNING *`,
-    [id]
+    [id],
   );
 };

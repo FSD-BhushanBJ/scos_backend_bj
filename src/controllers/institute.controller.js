@@ -3,13 +3,13 @@ import {
   getInstitutesModel,
   getInstituteByIdModel,
   updateInstituteModel,
-  deleteInstituteModel
+  deleteInstituteModel,
 } from "../models/instituteModel.js";
 
 // CREATE (same logic)
 export const createInstitute = async (req, res) => {
   try {
-    const { tenant_id, name, code, type, subtype } = req.body;
+    const { tenant_id, name, code, type, subtype, city, state } = req.body;
 
     if (!tenant_id) {
       return res.status(400).json({
@@ -19,14 +19,19 @@ export const createInstitute = async (req, res) => {
     }
 
     const result = await createInstituteModel(
-      tenant_id, name, code, type, subtype
+      tenant_id,
+      name,
+      code,
+      type,
+      subtype,
+      city,
+      state,
     );
 
     res.status(201).json({
       success: true,
       data: result.rows[0],
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -45,7 +50,6 @@ export const getInstitutes = async (req, res) => {
       success: true,
       data: result.rows,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -73,7 +77,6 @@ export const getInstituteById = async (req, res) => {
       success: true,
       data: result.rows[0],
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -90,7 +93,12 @@ export const updateInstitute = async (req, res) => {
     const { tenant_id, name, code, type, subtype } = req.body;
 
     const result = await updateInstituteModel(
-      id, tenant_id, name, code, type, subtype
+      id,
+      tenant_id,
+      name,
+      code,
+      type,
+      subtype,
     );
 
     if (result.rows.length === 0) {
@@ -104,7 +112,6 @@ export const updateInstitute = async (req, res) => {
       success: true,
       data: result.rows[0],
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -132,7 +139,6 @@ export const deleteInstitute = async (req, res) => {
       success: true,
       message: "Institute deleted successfully",
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
