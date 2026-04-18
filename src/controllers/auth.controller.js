@@ -7,6 +7,7 @@ import {
 } from "../models/authModel.js";
 import { MESSAGES } from "../constants/messages.js";
 import { errorResponse, successResponse } from "../responses/responseHandler.js";
+import pool from "../config/db.js";
 
 // ─── LOGIN ───────────────────────────────────────────────────────────────────
 export const loginUser = async (req, res) => {
@@ -106,6 +107,41 @@ export const loginUser = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+// ─── REGISTER ───────────────────────────────────────────────────────
+export const registerUser = async (req, res) => {
+  try {
+    const { first_name, last_name, email, mobile, password } = req.body;
+
+    // 1. Validate input
+    if (!first_name || !last_name || !email || !mobile || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const full_name = `${first_name} ${last_name}`;
+
+    // 🔥 MAIN LINE (bcrypt hash)
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 2. Insert user
+    const result = await pool.query(
+      `INSERT INTO users 
+      (first_name, last_name, full_name, email, mobile, password_hash)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id, email`,
+      [first_name, last_name, full_name, email, mobile, hashedPassword]
+    );
+
+    return successResponse(res, result.rows[0]);
+
+  } catch (error) {
+    console.error("Register Error:", error);
+    return errorResponse(res, "Registration failed");
   }
 };
 

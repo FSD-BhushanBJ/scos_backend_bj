@@ -1,11 +1,6 @@
 import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
-import userRoutes from "./routes/user.route.js";
-import roleRoutes from "./routes/role.route.js";
-import instituteRoutes from "./routes/institute.route.js";
-import mappingRoutes from "./routes/mapping.route.js";
-import tenantRoutes from "./routes/tenant.route.js";
 import { initRoutes } from "./route_manager/routeManager.js";
 
 
