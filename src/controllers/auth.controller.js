@@ -6,7 +6,10 @@ import {
   getRolesByUserAndInstituteModel,
 } from "../models/authModel.js";
 import { MESSAGES } from "../constants/messages.js";
-import { errorResponse, successResponse } from "../responses/responseHandler.js";
+import {
+  errorResponse,
+  successResponse,
+} from "../responses/responseHandler.js";
 import pool from "../config/db.js";
 
 // ─── LOGIN ───────────────────────────────────────────────────────────────────
@@ -21,6 +24,7 @@ export const loginUser = async (req, res) => {
         message: "Email and password are required",
       });
     }
+
 
     // 2. Find user
     const userResult = await findUserByEmailModel(email);
@@ -82,6 +86,9 @@ export const loginUser = async (req, res) => {
     } else {
       flow = "institute_selection";
     }
+    console.log("ROWS:", mappingResult.rows.length);
+    console.log("INSTITUTES LENGTH:", institutes.length);
+    console.log("FLOW:", flow);
 
     // 8. Generate JWT
     const token = generateToken({ id: user.id, email: user.email });
@@ -100,7 +107,6 @@ export const loginUser = async (req, res) => {
       user: responseUser,
       institutes,
     });
-
   } catch (error) {
     console.error("Login Error:", error);
     return res.status(500).json({
@@ -134,11 +140,10 @@ export const registerUser = async (req, res) => {
       (first_name, last_name, full_name, email, mobile, password_hash)
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING id, email`,
-      [first_name, last_name, full_name, email, mobile, hashedPassword]
+      [first_name, last_name, full_name, email, mobile, hashedPassword],
     );
 
     return successResponse(res, result.rows[0]);
-
   } catch (error) {
     console.error("Register Error:", error);
     return errorResponse(res, "Registration failed");
@@ -165,7 +170,10 @@ export const selectInstitute = async (req, res) => {
     }
 
     // 1. Get roles for this user in the selected institute
-    const rolesResult = await getRolesByUserAndInstituteModel(user_id, institute_id);
+    const rolesResult = await getRolesByUserAndInstituteModel(
+      user_id,
+      institute_id,
+    );
 
     if (rolesResult.rows.length === 0) {
       return errorResponse(res, MESSAGES.NO_ROLE);
@@ -182,7 +190,6 @@ export const selectInstitute = async (req, res) => {
       institute_id,
       roles,
     });
-
   } catch (error) {
     console.error("Select Institute Error:", error);
     return errorResponse(res, "Server error");
